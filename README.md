@@ -15,7 +15,7 @@ See below sections to find the respective programs for each question.
 
 
 ### Q1 SQL
-**Docker and docker-compose are required to run.**
+**Docker and docker-compose are required.**
 
 Navigate to the directory:
 
@@ -63,3 +63,9 @@ Number of dummy users: 1000
 Process finished with exit code 0
 
 ```
+
+### Q2 Raw data analytics
+Simply run raw_data_analytics.py
+
+### Q3a Tagging prediction
+
