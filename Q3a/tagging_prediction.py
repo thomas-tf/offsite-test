@@ -17,15 +17,16 @@ class CantoneseTokenizer:
 
     def __init__(self):
         self.stop_words = pycantonese.stop_words()
-        self.chinese_punctuations = "！？｡。＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕" \
-                                    "〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏."
+        self.punctuations = "！？｡。＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕〖〗〘〙〚〛〜" \
+                            "〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏."
 
     def tokenize(self, text):
         # lower all english character
         text = text.lower()
 
         words = pycantonese.segment(text)
-        return [word for word in words if word not in self.stop_words and word not in self.chinese_punctuations]
+        # return [word for word in words if word not in self.stop_words and word not in self.punctuations]
+        return [word for word in words if word not in self.stop_words and word not in self.punctuations]
 
 
 def main():
@@ -122,6 +123,15 @@ def main():
         gs = GridSearchCV(pipeline, best_parameters, n_jobs=-1, verbose=3, cv=skf, scoring='accuracy')
 
     gs.fit(text, label)
+
+    # analysis feature importance
+    word_lookup = gs.best_estimator_.named_steps["vect"].vocabulary_
+    # reverse key and value to {index: word}
+    word_lookup = {v: k for k, v in word_lookup.items()}
+
+    top_50_important_words_index = gs.best_estimator_.named_steps["clf"].feature_importances_.argsort()[-50:][::-1]
+    top_50_important_words = [word_lookup[index] for index in top_50_important_words_index]
+    print(f'Top 50 significant words learnt by RF (in desc order): {top_50_important_words}')
 
     test_predictions = gs.predict(test_text)
 
