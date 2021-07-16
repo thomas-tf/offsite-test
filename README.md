@@ -86,3 +86,11 @@ sklearn pipeline is used along with gridsearchCV to search for the best performi
 Texts are segmented into words (詞) instead of characters using pyCantonese. 
 This step is crucial as the same set of Chinese characters in different order or combinations can mean different things.
 The features are simply the document frequency of each word. Random Forest is chosen to be the classification model.
+
+### Q3b Recommender system
+The dataset is not provided in the repo due to its very large size.
+
+In order to run the program, go [here](http://ocelma.net/MusicRecommendationDataset/lastfm-360K.html) and download the 360k users dataset. 
+
+Extract the file `usersha1-artmbid-artname-plays.tsv` and `usersha1-profile.tsv` under the Q3b directory.
+
