@@ -68,4 +68,20 @@ Process finished with exit code 0
 Simply run raw_data_analytics.py
 
 ### Q3a Tagging prediction
+Navigate to directory Q3a and run:
 
+`python tagging_prediction.py`
+
+#### Model structure
+Texts are segmented into words (詞) instead of characters using pyCantonese. 
+This step is crucial as the same set of Chinese characters in different order or combinations can mean different things.
+The features are simply the document frequency of each word. Random Forest chosen to be the classification model.
+
+#### Model performance
+The average accuracy on 5 stratified fold is 99.88%.
+3 articles were mis-clasified during CV.
+
+
+#### Hyper parameter tuning
+To find the best parameters of the Random Forest Classifier and Count Vectorizer,
+sklearn pipeline is used along with gridsearchCV to search for the best performing set of parameters.
