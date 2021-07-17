@@ -93,31 +93,22 @@ if __name__ == '__main__':
     sqltest = SQLTest(table_name)
 
     select_query = f'''
-        WITH USER_WHO_INSTALLED_APP_ON_DATE AS ( 
-            SELECT DISTINCT
-                {table_name}.uid
-            FROM
-                {table_name}
-            WHERE
-                DATE({table_name}.time) = to_date('2017-04-01', 'YYYY-MM-DD') 
-                AND {table_name}.event_name = 'FIRST_INSTALL'
-        ), USER_WHO_USED_APP_AT_LEAST_ONCE_IN_TIME_RANGE AS (
-            SELECT DISTINCT
-                {table_name}.uid
-            FROM
-                {table_name}
-            WHERE
-                {table_name}.time BETWEEN to_date('2017-04-02', 'YYYY-MM-DD') 
-                AND to_date('2017-04-08', 'YYYY-MM-DD')
-        )
         SELECT
-            COUNT(uid)
+            COUNT(DISTINCT {table_name}.uid)
         FROM
-            USER_WHO_INSTALLED_APP_ON_DATE
-        INNER JOIN
-            USER_WHO_USED_APP_AT_LEAST_ONCE_IN_TIME_RANGE
-        USING 
-            (uid)
+            {table_name}
+        WHERE
+            {table_name}.time BETWEEN to_date('2017-04-02', 'YYYY-MM-DD') 
+            AND to_date('2017-04-08', 'YYYY-MM-DD')
+            AND {table_name}.uid IN (
+                SELECT DISTINCT
+                    {table_name}.uid
+                FROM
+                    {table_name}
+                WHERE
+                    DATE({table_name}.time) = to_date('2017-04-01', 'YYYY-MM-DD') 
+                    AND {table_name}.event_name = 'FIRST_INSTALL'
+            )               
     '''
 
     print("SQL query:")

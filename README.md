@@ -45,39 +45,29 @@ Then run sql.py to display the query and result:
 ```
 SQL query:
 
-        WITH USER_WHO_INSTALLED_APP_ON_DATE AS ( 
-            SELECT DISTINCT
-                piwik_track.uid
-            FROM
-                piwik_track
-            WHERE
-                DATE(piwik_track.time) = to_date('2017-04-01', 'YYYY-MM-DD') 
-                AND piwik_track.event_name = 'FIRST_INSTALL'
-        ), USER_WHO_USED_APP_AT_LEAST_ONCE_IN_TIME_RANGE AS (
-            SELECT DISTINCT
-                piwik_track.uid
-            FROM
-                piwik_track
-            WHERE
-                piwik_track.time BETWEEN to_date('2017-04-02', 'YYYY-MM-DD') 
-                AND to_date('2017-04-08', 'YYYY-MM-DD')
-        )
         SELECT
-            COUNT(uid)
+            COUNT(DISTINCT piwik_track.uid)
         FROM
-            USER_WHO_INSTALLED_APP_ON_DATE
-        INNER JOIN
-            USER_WHO_USED_APP_AT_LEAST_ONCE_IN_TIME_RANGE
-        USING 
-            (uid)
+            piwik_track
+        WHERE
+            piwik_track.time BETWEEN to_date('2017-04-02', 'YYYY-MM-DD') 
+            AND to_date('2017-04-08', 'YYYY-MM-DD')
+            AND piwik_track.uid IN (
+                SELECT DISTINCT
+                    piwik_track.uid
+                FROM
+                    piwik_track
+                WHERE
+                    DATE(piwik_track.time) = to_date('2017-04-01', 'YYYY-MM-DD') 
+                    AND piwik_track.event_name = 'FIRST_INSTALL'
+            )               
     
 Table name: piwik_track
 Number of dummy records: 10000
 Number of dummy users: 1000
-333
+323
 
 Process finished with exit code 0
-
 ```
 
 ### Q2 Raw data analytics
