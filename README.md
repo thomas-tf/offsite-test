@@ -94,3 +94,34 @@ In order to run the program, go [here](http://ocelma.net/MusicRecommendationData
 
 Extract the file `usersha1-artmbid-artname-plays.tsv` and `usersha1-profile.tsv` under the Q3b directory.
 
+opens up your jupyter notebook by running the command:
+
+`jupyter notebook`
+
+navigate to directory `offsite-test/Q3b` and run the jupyter notebook `User-user Nearest Neighbours Prototype.ipynb`
+
+#### System design
+![system design](Q3b/system_design.jpg)
+
+The recommender (or the model) will be dockerized and scheduled to run daily using a scheduler (e.g. cronjob, Apache Airflow).
+The generated recommendations will be store into a database (here we use DynamoDB due to its super fast read and it's a key value DB).
+The recommendations will then be available for the app/web server to fetch through an API endpoint (API endpoint will likely be a flask application).
+
+#### Method
+- Adopts user to user collaborative filtering.
+- Uses user profile and normalised plays as features to find nearest neighbours.
+- Get the top artists from nearest neighbours that are not yet listened by the user as recommendation.
+
+#### Environment setup for prototype
+install the packages in `requirements.txt`
+
+#### Production Concern
+1. **data volume growth**\
+The more data the longer the model needs to compute, 
+currently it is able to produce recommendations for all female users in around 30 minutes.
+This will not be the case when the number of users increase and could possibly take a much longer time to compute once.
+If the data volume grows to much, we can filter out data recorded long time ago (say, 5 years) and it is also possible to use other models,
+such as FMs, and even deep models.
+2. **new users**\
+Currently new users are assumed to have the preference of the average of all users (global baseline approach).
+But this might not work very well on these people, I'd suggest to use rule-based recommendation for new users depending on the performance (e.g. top artists in your country).
