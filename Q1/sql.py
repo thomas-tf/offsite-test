@@ -15,11 +15,11 @@ class SQLTest:
     def __init__(self, table_name='piwik_track'):
         # Establishing the connection
         self.conn = psycopg2.connect(
-            database=os.environ.get('POSTGRESQL_DATABASE', 'postgres'),
-            user=os.environ.get('POSTGRESQL_USERNAME', 'postgres'),
-            password=os.environ.get('POSTGRESQL_PASSWORD', 'very_safe_password'),
-            host=os.environ.get('POSTGRESQL_HOST', '127.0.0.1'),
-            port=os.environ.get('POSTGRESQL_PORT', 5432)
+            database=os.environ.get('POSTGRES_DATABASE', 'postgres'),
+            user=os.environ.get('POSTGRES_USER', 'postgres'),
+            password=os.environ.get('POSTGRES_PASSWORD', 'very_safe_password'),
+            host=os.environ.get('POSTGRES_HOST', '127.0.0.1'),
+            port=os.environ.get('POSTGRES_PORT', 5432)
         )
         self.conn.autocommit = True
 

@@ -23,7 +23,9 @@ Navigate to the directory:
 
 Docker compose a postgres container by running:
 
-`docker-compose up`
+`docker-compose up --force-recreate`
+
+**Make sure you do not have other postgres that is active and using port 5432**
 
 Then run sql.py to display the query and result:
 ```
